@@ -4286,6 +4286,9 @@ components:
         name:
           type: string
           description: "Logical name of the DAG"
+        label:
+          type: string
+          description: "Optional display name for the DAG shown in the UI"
         schedule:
           type: array
           description: "List of scheduling expressions defining when DAG-runs should be created from this DAG"
@@ -4547,6 +4550,9 @@ components:
         name:
           type: string
           description: "Unique identifier for the DAG within its group"
+        label:
+          type: string
+          description: "Optional display name for the DAG shown in the UI"
         schedule:
           type: array
           description: "List of scheduling expressions defining when DAG-runs should be created from this DAG"

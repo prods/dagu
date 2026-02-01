@@ -8,6 +8,10 @@
       "type": "string",
       "description": "Name of the DAG. If omitted, defaults to the YAML filename without extension."
     },
+    "label": {
+      "type": "string",
+      "description": "Optional display name for the DAG shown in the UI. Unlike 'name', this has no length restrictions and can contain any characters."
+    },
     "description": {
       "type": "string",
       "description": "A brief description explaining what this DAG does. This helps document the DAG's purpose."

@@ -267,7 +267,6 @@ export interface paths {
          *
          *     Returns a list of validation errors. When the spec can be partially parsed,
          *     the response may also include parsed DAG details built with error-tolerant loading.
-         *
          */
         post: operations["validateDAGSpec"];
         delete?: never;
@@ -336,7 +335,6 @@ export interface paths {
          *     **Important behaviors:**
          *     - If the timeout is exceeded, the DAG run continues executing in the background. The 408 response includes the `dagRunId` so clients can monitor or cancel the run.
          *     - If the DAG reaches a 'waiting' status (human-in-the-loop approval needed), the endpoint returns immediately with 200 and the current status.
-         *
          */
         post: operations["executeDAGSync"];
         delete?: never;
@@ -548,7 +546,6 @@ export interface paths {
          *
          *     This endpoint does not require a pre-existing DAG file; the supplied `spec` is parsed and validated
          *     similarly to `/dags/validate`, and the run is executed immediately if valid.
-         *
          */
         post: operations["executeDAGRunFromSpec"];
         delete?: never;
@@ -572,7 +569,6 @@ export interface paths {
          *
          *     This endpoint does not require a pre-existing DAG file; the supplied `spec` is parsed and validated
          *     similarly to `/dags/validate`, and the run is persisted to the queue if valid.
-         *
          */
         post: operations["enqueueDAGRunFromSpec"];
         delete?: never;
@@ -1279,7 +1275,6 @@ export interface paths {
          *     The request body is passed to the DAG as the WEBHOOK_PAYLOAD environment
          *     variable. The DAG run is enqueued and the endpoint returns immediately
          *     with the dag-run ID.
-         *
          */
         post: operations["triggerWebhook"];
         delete?: never;
@@ -1325,7 +1320,6 @@ export interface paths {
          * Create webhook for DAG
          * @description Creates a new webhook for the specified DAG. Returns the full webhook token,
          *     which is only shown once. Store it securely.
-         *
          */
         post: operations["createDAGWebhook"];
         /**
@@ -1351,7 +1345,6 @@ export interface paths {
          * Regenerate webhook token
          * @description Generates a new token for the existing webhook. The old token becomes
          *     invalid immediately. Returns the new token, which is only shown once.
-         *
          */
         post: operations["regenerateDAGWebhookToken"];
         delete?: never;
@@ -1852,6 +1845,8 @@ export interface components {
             group?: string;
             /** @description Logical name of the DAG */
             name: string;
+            /** @description Optional display name for the DAG shown in the UI */
+            label?: string;
             /** @description List of scheduling expressions defining when DAG-runs should be created from this DAG */
             schedule?: components["schemas"]["Schedule"][];
             /** @description Human-readable description of the DAG's purpose and behavior */
@@ -1887,7 +1882,6 @@ export interface components {
          *     6: "Partial Success"
          *     7: "Waiting for approval"
          *     8: "Rejected"
-         *
          * @enum {integer}
          */
         Status: Status;
@@ -1912,7 +1906,6 @@ export interface components {
          *     6: "Partial Success"
          *     7: "Waiting for approval"
          *     8: "Rejected"
-         *
          * @enum {integer}
          */
         NodeStatus: NodeStatus;
@@ -2003,6 +1996,8 @@ export interface components {
             group?: string;
             /** @description Unique identifier for the DAG within its group */
             name: string;
+            /** @description Optional display name for the DAG shown in the UI */
+            label?: string;
             /** @description List of scheduling expressions defining when DAG-runs should be created from this DAG */
             schedule?: components["schemas"]["Schedule"][];
             /** @description Human-readable description of the DAG's purpose and behavior */
@@ -3744,10 +3739,11 @@ export interface operations {
                 name?: string;
                 /** @description Filter DAGs by tags (comma-separated). Returns DAGs that have ALL specified tags. */
                 tags?: string;
-                /** @description Field to sort by:
+                /**
+                 * @description Field to sort by:
                  *     - `name`: Sort alphabetically by DAG name (case-insensitive)
                  *     - `nextRun`: Sort by next scheduled run time. DAGs with earlier next run times appear first in ascending order. DAGs without schedules appear last.
-                 *      */
+                 */
                 sort?: PathsDagsGetParametersQuerySort;
                 /** @description Sort order (ascending or descending) */
                 order?: PathsDagsGetParametersQueryOrder;

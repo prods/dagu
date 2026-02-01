@@ -21,6 +21,8 @@ import (
 type dag struct {
 	// Name is the name of the DAG.
 	Name string
+	// Label is an optional display name for the DAG shown in the UI.
+	Label string
 	// Group is the group of the DAG for grouping DAGs on the UI.
 	Group string
 	// Description is the description of the DAG.
@@ -377,6 +379,7 @@ type transform struct {
 // metadataTransformers are always run (for listing, scheduling, etc.)
 var metadataTransformers = []transform{
 	{"name", newTransformer("Name", buildName)},
+	{"label", newTransformer("Label", buildLabel)},
 	{"group", newTransformer("Group", buildGroup)},
 	{"description", newTransformer("Description", buildDescription)},
 	{"type", newTransformer("Type", buildType)},
@@ -578,6 +581,10 @@ func buildName(ctx BuildContext, d *dag) (string, error) {
 		return defaultName(ctx.file), nil
 	}
 	return "", nil
+}
+
+func buildLabel(_ BuildContext, d *dag) (string, error) {
+	return strings.TrimSpace(d.Label), nil
 }
 
 func buildGroup(_ BuildContext, d *dag) (string, error) {
