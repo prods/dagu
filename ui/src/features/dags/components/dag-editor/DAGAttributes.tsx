@@ -23,7 +23,7 @@ function DAGAttributes({ dag }: Props) {
   return (
     <div>
       <h2 className="text-xl font-semibold text-foreground mb-4">
-        {dag.name}
+        {dag.label || dag.name}
       </h2>
 
       {dag.description && (

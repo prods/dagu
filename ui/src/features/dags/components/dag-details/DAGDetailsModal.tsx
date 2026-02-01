@@ -156,7 +156,7 @@ function DAGDetailsModal({ fileName, isOpen, onClose }: Props): React.ReactEleme
           value={{
             refresh: refreshFn,
             fileName: fileName || '',
-            name: data.dag?.name || '',
+            name: data.dag?.label || data.dag?.name || '',
           }}
         >
           <RootDAGRunContext.Provider

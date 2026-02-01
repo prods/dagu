@@ -42,7 +42,7 @@ export function DAGPicker({
     if (!data?.dags) return [];
     return data.dags.map((d) => ({
       fileName: d.fileName,
-      name: d.dag.name,
+      name: d.dag.label || d.dag.name,
     }));
   }, [data]);
 

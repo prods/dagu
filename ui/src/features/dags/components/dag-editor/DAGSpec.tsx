@@ -341,7 +341,7 @@ function DAGSpec({ fileName, localDags }: Props) {
                           onClick={() => setActiveTab('parent')}
                           className="cursor-pointer whitespace-nowrap"
                         >
-                          {data?.dag?.name} (Parent)
+                          {data?.dag?.label || data?.dag?.name} (Parent)
                         </Tab>
                         {localDags?.map(
                           (localDag: components['schemas']['LocalDag']) => (

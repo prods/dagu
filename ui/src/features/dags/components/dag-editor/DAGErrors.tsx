@@ -41,10 +41,11 @@ function DAGErrors({ dags, errors, hasError }: Props) {
             .filter((dag) => dag.errors && dag.errors.length > 0)
             .map((dag) => {
               const url = `/dags/${dag.fileName}`;
+              const displayName = dag.dag.label || dag.dag.name;
               return dag.errors.map((err, index) => (
                 <li key={`${dag.dag.name}-${index}`} className="text-xs">
                   <a href={url} className="font-medium underline hover:text-error">
-                    {dag.dag.name}
+                    {displayName}
                   </a>
                   : {err}
                 </li>

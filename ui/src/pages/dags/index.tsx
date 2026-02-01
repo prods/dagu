@@ -368,7 +368,7 @@ function DAGsContent() {
     const openFileNames = new Set(tabs.map((t) => t.fileName));
     const availableDAG = dagFiles.find((d) => !openFileNames.has(d.fileName));
     if (availableDAG) {
-      addTab(availableDAG.fileName, availableDAG.dag.name);
+      addTab(availableDAG.fileName, availableDAG.dag.label || availableDAG.dag.name);
     }
   };
 

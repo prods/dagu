@@ -194,7 +194,7 @@ function DAGDetailsPanel({ fileName, onClose, onNavigate }: Props): React.ReactE
         value={{
           refresh: refreshFn,
           fileName: fileName || '',
-          name: displayData.dag.name || '',
+          name: displayData.dag.label || displayData.dag.name || '',
         }}
       >
         <RootDAGRunContext.Provider

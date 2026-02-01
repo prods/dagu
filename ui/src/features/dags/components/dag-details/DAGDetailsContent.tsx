@@ -95,7 +95,7 @@ const DAGDetailsContent: React.FC<DAGDetailsContentProps> = ({
       value={{
         refresh: refreshFn,
         fileName: fileName || '',
-        name: dag?.name || '',
+        name: dag?.label || dag?.name || '',
       }}
     >
       <div className="w-full flex flex-col">
