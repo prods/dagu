@@ -122,7 +122,7 @@ function DAGDetails() {
   const dagData = sseResult.data || pollingDagData;
 
   // Use dagRunName from URL if available, otherwise use the name from dagData
-  const dagRunName = queriedDAGRunName || dagData?.dag?.name || '';
+  const dagRunName = queriedDAGRunName || dagData?.dag?.label || dagData?.dag?.name || '';
 
   // Fetch specific DAG-run data if dagRunId is provided
   const { data: dagRunResponse, mutate: mutateDagRun } = useQuery(

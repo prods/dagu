@@ -166,7 +166,7 @@ const DAGHeader: React.FC<DAGHeaderProps> = ({
           </nav>
 
           <h1 className="text-2xl font-bold text-foreground truncate">
-            {dagRunToDisplay.name}
+            {(dag as components['schemas']['DAGDetails'])?.label || dag.name || dagRunToDisplay.name}
           </h1>
         </div>
 
