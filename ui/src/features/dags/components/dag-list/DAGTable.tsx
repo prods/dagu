@@ -103,7 +103,7 @@ function DAGCard({
   className = '',
 }: DAGCardProps) {
   const fileName = dag.fileName;
-  const title = dag.dag.name;
+  const title = dag.dag.label || dag.dag.name;
   const status = dag.latestDAGRun?.status;
   const statusLabel = dag.latestDAGRun?.statusLabel;
   const tags = dag.dag.tags || [];
@@ -127,7 +127,7 @@ function DAGCard({
       {/* Header: Name + Status */}
       <div className="flex justify-between items-start gap-2 mb-1.5">
         <div className="font-medium text-xs truncate flex-1 min-w-0">
-          {dag.dag.name}
+          {dag.dag.label || dag.dag.name}
         </div>
         <StatusChip status={status} size="xs">
           {statusLabel}
@@ -418,6 +418,7 @@ const defaultColumns = [
         // DAG Row: Render link with description and tags below
         const tags = data.dag.dag.tags || [];
         const description = data.dag.dag.description;
+        const displayName = data.dag.dag.label || getValue();
 
         return (
           <div
@@ -425,7 +426,7 @@ const defaultColumns = [
             className="space-y-0.5 min-w-0"
           >
             <div className="font-medium text-foreground tracking-tight text-xs truncate">
-              {getValue()}
+              {displayName}
             </div>
 
             {description && (
@@ -1050,7 +1051,7 @@ function DAGTable({
         .filter((row) => (row.original as Data)?.kind === ItemKind.DAG)
         .map((row) => ({
           fileName: (row.original as DAGRow).dag.fileName,
-          title: (row.original as DAGRow).dag.dag.name,
+          title: (row.original as DAGRow).dag.dag.label || (row.original as DAGRow).dag.dag.name,
         }));
 
       // Find current index
@@ -1280,7 +1281,7 @@ function DAGTable({
                       else if (isDAGRow && 'dag' in row.original) {
                         const dagRow = row.original as DAGRow;
                         const fileName = dagRow.dag.fileName;
-                        const title = dagRow.dag.dag.name;
+                        const title = dagRow.dag.dag.label || dagRow.dag.dag.name;
 
                         // If Cmd (Mac) or Ctrl (Windows/Linux) key is pressed, open in new tab
                         if (e.metaKey || e.ctrlKey) {

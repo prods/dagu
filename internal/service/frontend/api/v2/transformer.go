@@ -14,6 +14,7 @@ func toDAG(dag *core.DAG) api.DAG {
 
 	return api.DAG{
 		Name:          dag.Name,
+		Label:         ptrOf(dag.Label),
 		Group:         ptrOf(dag.Group),
 		Description:   ptrOf(dag.Description),
 		Params:        ptrOf(dag.Params),
@@ -270,6 +271,7 @@ func toDAGDetails(dag *core.DAG) *api.DAGDetails {
 
 	return &api.DAGDetails{
 		Name:              dag.Name,
+		Label:             ptrOf(dag.Label),
 		Description:       ptrOf(dag.Description),
 		DefaultParams:     ptrOf(dag.DefaultParams),
 		Delay:             ptrOf(int(dag.Delay.Seconds())),

@@ -71,6 +71,10 @@ type DAG struct {
 	Group string `json:"group,omitempty"`
 	// Name is the name of the DAG. The default is the filename without the extension.
 	Name string `json:"name,omitempty"`
+	// Label is an optional display name for the DAG shown in the UI.
+	// Unlike Name, this has no length restrictions and is purely for display.
+	// If empty, the UI will fall back to using Name.
+	Label string `json:"label,omitempty"`
 	// Type is the execution type (graph, chain, or agent). Default is graph.
 	Type string `json:"type,omitempty"`
 	// Shell is the default shell to use for all steps in this DAG.
