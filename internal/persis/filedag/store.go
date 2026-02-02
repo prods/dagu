@@ -139,6 +139,27 @@ func (store *Storage) GetMetadata(ctx context.Context, name string) (*core.DAG, 
 	})
 }
 
+// loadMetadataWithCache loads DAG metadata using the cache if available.
+// This is used by List() to avoid repeated file reads for unchanged files.
+func (store *Storage) loadMetadataWithCache(ctx context.Context, filePath string) (*core.DAG, error) {
+	if store.fileCache == nil {
+		return spec.Load(ctx, filePath,
+			spec.OnlyMetadata(),
+			spec.WithoutEval(),
+			spec.SkipSchemaValidation(),
+			spec.WithAllowBuildErrors(),
+		)
+	}
+	return store.fileCache.LoadLatest(filePath, func() (*core.DAG, error) {
+		return spec.Load(ctx, filePath,
+			spec.OnlyMetadata(),
+			spec.WithoutEval(),
+			spec.SkipSchemaValidation(),
+			spec.WithAllowBuildErrors(),
+		)
+	})
+}
+
 // GetDetails retrieves the details of a DAG by its name.
 func (store *Storage) GetDetails(ctx context.Context, name string, opts ...spec.LoadOption) (*core.DAG, error) {
 	filePath, err := store.locateDAG(name)
@@ -288,31 +309,22 @@ func (store *Storage) List(ctx context.Context, opts exec.ListDAGsOptions) (exec
 
 		baseName := path.Base(entry.Name())
 		dagName := strings.TrimSuffix(baseName, path.Ext(baseName))
-		if opts.Name != "" && len(opts.Tags) == 0 {
-			// If tags are not provided, check before reading the file to avoid
-			// unnecessary file read and parsing.
-			if !containsSearchText(dagName, opts.Name) {
-				// Return early if the name does not match the search text.
-				continue
-			}
-		}
 
-		// Read the file and parse the DAG.
-		// Use WithAllowBuildErrors to include DAGs with errors in the list
+		// Load DAG metadata using cache if available.
+		// Cache automatically invalidates when file is modified (checks mod-time and size).
 		filePath := filepath.Join(store.baseDir, entry.Name())
-		dag, err := spec.Load(ctx, filePath,
-			spec.OnlyMetadata(),
-			spec.WithoutEval(),
-			spec.SkipSchemaValidation(),
-			spec.WithAllowBuildErrors(),
-		)
+		dag, err := store.loadMetadataWithCache(ctx, filePath)
 		if err != nil {
 			// If it completely fails to load, skip it
 			errList = append(errList, fmt.Sprintf("reading %s failed: %s", dagName, err))
 			continue
 		}
 
-		if opts.Name != "" && !containsSearchText(dagName, opts.Name) {
+		// Search in dagName (filename), dag.Name (internal name), and dag.Label (display name)
+		if opts.Name != "" &&
+			!containsSearchText(dagName, opts.Name) &&
+			!containsSearchText(dag.Name, opts.Name) &&
+			!containsSearchText(dag.Label, opts.Name) {
 			continue
 		}
 
