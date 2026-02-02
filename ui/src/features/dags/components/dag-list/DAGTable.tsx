@@ -488,6 +488,7 @@ const defaultColumns = [
       }
       if (data.kind === ItemKind.DAG) {
         const name = data.dag.dag.name.toLowerCase();
+        const label = (data.dag.dag.label || '').toLowerCase();
         const fileName = data.dag.fileName.toLowerCase();
         const description = (data.dag.dag.description || '').toLowerCase();
         const searchValue = Array.isArray(filterValue)
@@ -498,10 +499,11 @@ const defaultColumns = [
           ? filterValue.map((t) => t.toLowerCase())
           : [];
 
-        // Search in name and description
+        // Search in label, name, fileName, and description
         if (
           !tagFilters.length && // Only search text if no tag filters
-          (fileName.includes(searchValue) ||
+          (label.includes(searchValue) ||
+            fileName.includes(searchValue) ||
             name.includes(searchValue) ||
             description.includes(searchValue))
         ) {
